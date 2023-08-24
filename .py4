@@ -1,0 +1,72 @@
+import openai
+import asyncio
+import speech_recognition as sr
+import pyttsx3
+
+openai.api_key = "YOUR_APIsk-tLn0YjKF5Cz5WmYI6FUxT3BlbkFJYd9xFJzj3Y0ArOh3mpRf_KEY"  # Replace with your actual API key
+
+WAKE_UP_WORD = "assistant"  # Change this to your preferred wake-up word
+
+def send_message(messages):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages
+    )
+    return response.choices[0].message["content"]
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+async def process_user_input(user_input, messages):
+    messages.append({"role": "user", "content": user_input})
+    response = await loop.run_in_executor(None, send_message, messages)
+    print("Robot:", response)
+    speak(response)
+    messages.append({"role": "assistant", "content": response})
+
+recognizer = sr.Recognizer()
+
+messages = []
+
+loop = asyncio.get_event_loop()
+
+def listen_for_wake_word():
+    with sr.Microphone() as source:
+        print("Listening for wake-up word...")
+        audio = recognizer.listen(source)
+
+    try:
+        spoken_text = recognizer.recognize_google(audio).lower()
+        print("Spoken:", spoken_text)
+        if WAKE_UP_WORD in spoken_text:
+            return True
+        return False
+
+    except sr.UnknownValueError:
+        return False
+    except sr.RequestError:
+        return False
+
+async def main():
+    while True:
+        if listen_for_wake_word():
+            print("Wake-up word detected.")
+            speak("Hey, I'm your assistant. What can I do for you today?")
+            while True:
+                with sr.Microphone() as source:
+                    print("Say something...")
+                    audio = recognizer.listen(source)
+
+                try:
+                    user_input = recognizer.recognize_google(audio)
+                    print("You:", user_input)
+                    await process_user_input(user_input, messages)
+
+                except sr.UnknownValueError:
+                    print("Sorry, could not understand your audio.")
+                except sr.RequestError:
+                    print("Could not request results; check your network connection.")
+
+loop.run_until_complete(main())
