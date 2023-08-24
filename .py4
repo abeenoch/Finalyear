@@ -3,7 +3,7 @@ import asyncio
 import speech_recognition as sr
 import pyttsx3
 
-openai.api_key = "YOUR_APIsk-tLn0YjKF5Cz5WmYI6FUxT3BlbkFJYd9xFJzj3Y0ArOh3mpRf_KEY"  # Replace with your actual API key
+openai.api_key = "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"  # Replace with your actual API key
 
 WAKE_UP_WORD = "assistant"  # Change this to your preferred wake-up word
 
