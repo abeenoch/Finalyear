@@ -95,12 +95,16 @@ try:
                 drop_object()
             elif "move forward" in command:
                 move_forward()
+                time.sleep(2)
             elif "move backward" in command:
                 move_backward()
+                time.sleep(2)
             elif "turn left" in command:
                 turn_left()
+                time.sleep(1)
             elif "turn right" in command:
                 turn_right()
+                time.sleep(1)
             elif "stop" in command:
                 stop_robot()
             else:
