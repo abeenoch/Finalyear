@@ -111,6 +111,13 @@ try:
             pick_object()
         elif command == 'drop':
             drop_object()
+        elif command == 'short right':
+            turn_right()
+            time.sleep(0.5)
+        elif command == 'short left':
+            turn_left()
+            time.sleep(0.5)
+
 
 except KeyboardInterrupt:
     print('omo')
